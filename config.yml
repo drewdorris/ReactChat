@@ -1,0 +1,54 @@
+# # # #
+# ReactChat v0.0.1  
+# # # #
+
+ 
+# Create a reaction to add to the menu.
+# Number of reactions currently limited to 18.
+# 
+# Settings:
+# friendlyname - Name of item seen in inventory
+# position - Slot number in inventory (starts at 0)
+# id - Item ID
+# skullid (optional) - Base64 value if using heads
+# Extra info on spigot info page
+reactions:
+  funny:
+    friendlyname: "Funny"
+    position: 1
+    id: 397
+    skullid: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNTA1OWQ1OWViNGU1OWMzMWVlY2Y5ZWNlMmY5Y2YzOTM0ZTQ1YzBlYzQ3NmZjODZiZmFlZjhlYTkxM2VhNzEwIn19fQ
+  sad:
+    friendlyname: "Sad"
+    position: 2
+    id: 88
+    skullid: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvODNmZGNmMDQyZGFjYzczMmI2OTk1ODJjYWU3YzU5YTY1OWM4NmM1N2U0MzE0MmEyY2M4OWU0ZDllZjAzNyJ9fX0
+  love:
+    friendlyname: "Love"
+    position: 3
+    id: 397
+    skullid: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTI5ZmI5ZjU5M2I2YWU1MzNkZmE4Y2U3OTYxNWZjYzM1ODk0YTQyY2JiNDFkZTU5OGQ2OTQ3NjczNTJmZSJ9fX0
+  derp:
+    friendlyname: "Derp!"
+    position: 4
+    id: 397
+    skullid: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvM2JhYWJlNzI0ZWFlNTljNWQxM2Y0NDJjN2RjNWQyYjFjNmI3MGMyZjgzMzY0YTQ4OGNlNTk3M2FlODBiNGMzIn19fQ
+  crazy:
+    friendlyname: "Crazy"
+    position: 5
+    id: 397
+    skullid: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvNzFiZWNhY2VjODU4YTE5ODQ4ODYwYjI1MjJjMzI5MzZhZGYxNTg4YzFlZjQyMzc5NDAzZmVmODNkYTRiYiJ9fX0
+  agree:
+    friendlyname: "Agree"
+    position: 6
+    id: 397
+    skullid: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvOGE5OTM0MmUyYzczYTlmMzgyMjYyOGU3OTY0ODgyMzRmMjU4NDQ2ZjVhMmQ0ZDU5ZGRlNGFhODdkYjk4In19fQ
+  disagree:
+    friendlyname: "Disagree"
+    position: 7
+    id: 397
+    skullid: eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTZjNjBkYTQxNGJmMDM3MTU5YzhiZThkMDlhOGVjYjkxOWJmODlhMWEyMTUwMWI1YjJlYTc1OTYzOTE4YjdiIn19fQ
+  lit:
+    friendlyname: "Lit"
+    position: 8
+    id: 50
