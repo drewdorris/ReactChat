@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import me.stupiddrew9.reactchat.React;
+import me.stupiddrew9.reactchat.util.InvUtil;
 import net.md_5.bungee.api.ChatColor;
 
 public class ReactCommand implements CommandExecutor {
@@ -19,7 +20,7 @@ public class ReactCommand implements CommandExecutor {
 		}
 
 		if (args.length < 1) {
-			helpCommand(player);
+			InvUtil.helpCommand(player);
 			return false;
 		}
 
@@ -66,12 +67,6 @@ public class ReactCommand implements CommandExecutor {
 		}
 
 		return true;
-
-	}
-
-	private void helpCommand(Player player) {
-
-		player.sendMessage(ChatColor.GOLD + "Click on a message to add a reaction. If the message is 100+ messages old, you can't react to it!");
 
 	}
 

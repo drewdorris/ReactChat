@@ -2,12 +2,13 @@ package me.stupiddrew9.reactchat.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -136,17 +137,20 @@ public class InvUtil {
 		
 	}
 	
+	public static void helpCommand(Player player) {
+
+		player.sendMessage(ChatColor.GOLD + "Click on a message to add a reaction. If the message is 100+ messages old, you can't react to it!");
+
+	}
+	
 	/**
 	 * Sends an alert to the reactor and reactee when a reaction is added
-	 * @param inventory
-	 * @param event
 	 * @param player
 	 * @param invOwner
 	 * @param originalMsg
 	 * @param itemName
 	 */
-	public static void sendAlert(Inventory inventory, InventoryClickEvent event, Player player, Player invOwner, 
-			String originalMsg, String itemName) {
+	public static void sendAlert(Player player, Player invOwner, String originalMsg, String itemName) {
 		
 		TextComponent playerMsg = new TextComponent();
 		TextComponent invOwnerMsg = new TextComponent();
@@ -178,7 +182,7 @@ public class InvUtil {
 	 * @param players
 	 */
 	public static void setReactions(Inventory inventory, 
-			Inventory inventoryMenu, Player invOwner, HashMap<ItemStack, ArrayList<String>> players) {
+			Inventory inventoryMenu, Player invOwner, Map<ItemStack, List<String>> players) {
 		
 		// somehow assign players with items in hash
 		// dkiong
@@ -188,20 +192,21 @@ public class InvUtil {
 			inventoryMenu.setItem(i, air);
 		}
 		int i = 0;
-		for (ItemStack item : players.keySet()) {
-			ArrayList<String> playerList = players.get(item);
+		for (Entry<ItemStack, List<String>> item : players.entrySet()) {
+			ItemStack newStack = item.getKey();
+			List<String> playerList = item.getValue();
 			int reactSize = playerList.size();
 			String usernames = String.join((CharSequence) ", ", (Iterable<? extends CharSequence>) playerList);
-			item.setAmount(reactSize);
-			ItemMeta newItemMetas = item.getItemMeta();
+			newStack.setAmount(reactSize);
+			ItemMeta newItemMetas = newStack.getItemMeta();
 			newItemMetas.setLore(Arrays.asList(ChatColor.GOLD + "React to " + 
 			        ChatColor.YELLOW + invOwner.getName() + ChatColor.GOLD + "'s message",
 			        ChatColor.GOLD + "Reactions:",
 			        ChatColor.YELLOW + "" + ChatColor.ITALIC + usernames));
-			item.setItemMeta(newItemMetas);
+			newStack.setItemMeta(newItemMetas);
 			
-			inventory.setItem(i, item);
-			inventoryMenu.setItem(i, item);
+			inventory.setItem(i, item.getKey());
+			inventoryMenu.setItem(i, item.getKey());
 			i++;
 		}
 		

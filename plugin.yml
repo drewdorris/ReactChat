@@ -2,4 +2,4 @@ main: me.stupiddrew9.reactchat.React
 name: ReactChat
 version: 0.0.1-SNAPSHOT
 commands:
-  react: 
+  reactchat: 

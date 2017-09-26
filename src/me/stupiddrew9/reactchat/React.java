@@ -2,6 +2,8 @@ package me.stupiddrew9.reactchat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -155,35 +157,15 @@ public class React extends JavaPlugin {
 	public static ArrayList<HashMap<Player, Integer>> getReactCount() {
 		return reactCount;
 	}
-	
-	private static ArrayList<HashMap<ItemStack, ArrayList<String>>> playersWithReaction = new ArrayList<HashMap<ItemStack, ArrayList<String>>>(50);
-	
-	/**
-	 * Assigns item with a list of players
-	 * @return playersWithReaction
-	 */
-	public static ArrayList<HashMap<ItemStack, ArrayList<String>>> getPlayersWithReaction() {
-		return playersWithReaction;
-	}
-	
-	private static ArrayList<HashMap<ItemStack, ArrayList<String>>> addedReactions = new ArrayList<HashMap<ItemStack, ArrayList<String>>>(50);
+
+	private static ArrayList<Map<ItemStack, List<String>>> addedReactions = new ArrayList<Map<ItemStack, List<String>>>(50);
 	
 	/**
 	 * Counts amnt of reactions in an inv per added reaction
 	 * @return addedReactions
 	 */
-	public static ArrayList<HashMap<ItemStack, ArrayList<String>>> getAddedReactions() {
+	public static ArrayList<Map<ItemStack, List<String>>> getAddedReactions() {
 		return addedReactions;
-	}
-	
-	private static ArrayList<ArrayList<ArrayList<String>>> clickedPlayersInv = new ArrayList<ArrayList<ArrayList<String>>>(50);
-
-	/**
-	 * Assigns a list of players onto a list of items in a list of inventories <o/
-	 * @return clickedPlayersInv
-	 */
-	public static ArrayList<ArrayList<ArrayList<String>>> getClickedPlayersInv() {
-		return clickedPlayersInv;
 	}
 	
 	public static int currentInv = 0;

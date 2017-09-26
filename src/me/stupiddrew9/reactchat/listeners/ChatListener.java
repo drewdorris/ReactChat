@@ -1,5 +1,7 @@
 package me.stupiddrew9.reactchat.listeners;
 
+import java.util.List;
+import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -64,21 +66,16 @@ public class ChatListener implements Listener {
 			// set items in the inv
 			InvUtil.defineInvContents(invArray, inv, user);
 			InvUtil.defineInvMenuContents(invArray, invMenu, user);
-			// array of invArrays, set in position of currentInv
-			React.getClickedPlayersInv().add(React.getCurrentInv(), invArray);
 			// store reaction count for each player
 			HashMap<Player, Integer> reactCount = new HashMap<Player, Integer>();
 			// array of reactCounts, set in position of currentInv
 			React.getReactCount().add(React.getCurrentInv(), reactCount);
 			// reactions added to the msg + amnt
-			HashMap<ItemStack, ArrayList<String>> addedReactions = new HashMap<ItemStack, ArrayList<String>>(27);
+			Map<ItemStack, List<String>> addedReactions = new HashMap<ItemStack, List<String>>(27);
 			React.getAddedReactions().add(React.getCurrentInv(), addedReactions);
 			// array of inventories
 			React.getInventories().add(React.getCurrentInv(), inv);
 			React.getInventoriesMenu().add(React.getCurrentInv(), invMenu);
-			// stores players list w/ item
-			HashMap<ItemStack, ArrayList<String>> playersAndItem = new HashMap<ItemStack, ArrayList<String>>(27);
-			React.getPlayersWithReaction().add(playersAndItem);
 			// identify an inventory w the currentInv
 			React.getInvIdentity().put(inv, React.getCurrentInv());
 			React.getInvMenuIdentity().put(invMenu, React.getCurrentInv());
@@ -104,14 +101,11 @@ public class ChatListener implements Listener {
 			ArrayList<ArrayList<String>> invArray = new ArrayList<ArrayList<String>>(27);
 			InvUtil.defineInvContents(invArray, inv, user);
 			InvUtil.defineInvMenuContents(invArray, invMenu, user);
-			React.getClickedPlayersInv().set(React.getCurrentInv(), invArray);
 			HashMap<Player, Integer> reactCount = new HashMap<Player, Integer>();
 			React.getReactCount().set(React.getCurrentInv(), reactCount);
-			HashMap<ItemStack, ArrayList<String>> addedReactions = new HashMap<ItemStack, ArrayList<String>>(27);
+			Map<ItemStack, List<String>> addedReactions = new HashMap<ItemStack, List<String>>(27);
 			React.getAddedReactions().set(React.getCurrentInv(), addedReactions);
 			React.getInventories().set(React.getCurrentInv(), inv);
-			HashMap<ItemStack, ArrayList<String>> playersAndItem = new HashMap<ItemStack, ArrayList<String>>(27);
-			React.getPlayersWithReaction().set(React.getCurrentInv(), playersAndItem);
 			React.getInventoriesMenu().set(React.getCurrentInv(), invMenu);
 			React.getInvIdentity().put(inv, React.getCurrentInv());
 			React.getInvMenuIdentity().put(invMenu, React.getCurrentInv());
