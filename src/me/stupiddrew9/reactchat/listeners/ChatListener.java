@@ -1,9 +1,9 @@
 package me.stupiddrew9.reactchat.listeners;
 
 import java.util.List;
-import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -24,8 +24,9 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class ChatListener implements Listener {
 
-	private static ArrayList<String> msgs = new ArrayList<String>(50);
-	private static HashMap<String, Integer> amntDupeMsgs = new HashMap<String, Integer>(50);
+	private static int limit = React.getMessageMax();
+	private static ArrayList<String> msgs = new ArrayList<String>(limit);
+	private static HashMap<String, Integer> amntDupeMsgs = new HashMap<String, Integer>(limit);
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
@@ -48,16 +49,16 @@ public class ChatListener implements Listener {
 
 		event.setCancelled(true);
 
-		if (React.getInventories().size() < 50) {
+		if (React.getInventories().size() < limit) {
 			if (msgs.contains(invTitle)) {
 				int j = amntDupeMsgs.get(invTitle);
 				amntDupeMsgs.put(invTitle, j + 1);
 				String numDupeString = (ChatColor.WHITE + "(" + Integer.toString(j) + ") ");
 				inv = Bukkit.createInventory(null, 27, (numDupeString + invTitle));	
-				invMenu = Bukkit.createInventory(null, 54, ("M " + numDupeString + invTitle));	
+				invMenu = Bukkit.createInventory(null, 54, (numDupeString + invTitle));	
 			} else {		
 				inv = Bukkit.createInventory(null, 27, invTitle);
-				invMenu = Bukkit.createInventory(null, 54, "M " + invTitle);	
+				invMenu = Bukkit.createInventory(null, 54, invTitle);	
 				amntDupeMsgs.put(invTitle, 0);
 			}
 			// add to check for the if statement 
@@ -67,11 +68,11 @@ public class ChatListener implements Listener {
 			InvUtil.defineInvContents(invArray, inv, user);
 			InvUtil.defineInvMenuContents(invArray, invMenu, user);
 			// store reaction count for each player
-			HashMap<Player, Integer> reactCount = new HashMap<Player, Integer>();
+			HashMap<String, Integer> reactCount = new HashMap<String, Integer>();
 			// array of reactCounts, set in position of currentInv
 			React.getReactCount().add(React.getCurrentInv(), reactCount);
 			// reactions added to the msg + amnt
-			Map<ItemStack, List<String>> addedReactions = new HashMap<ItemStack, List<String>>(27);
+			LinkedHashMap<ItemStack, List<String>> addedReactions = new LinkedHashMap<ItemStack, List<String>>(27);
 			React.getAddedReactions().add(React.getCurrentInv(), addedReactions);
 			// array of inventories
 			React.getInventories().add(React.getCurrentInv(), inv);
@@ -85,25 +86,25 @@ public class ChatListener implements Listener {
 			React.getMsgHash().put(inv, message);
 		}
 
-		if (React.getInventories().size() == 50) {
+		if (React.getInventories().size() == limit) {
 			React.getInventories().get(React.getCurrentInv()).equals(null);
 			if (msgs.contains(invTitle)) {
 				int j = amntDupeMsgs.get(invTitle);
 				amntDupeMsgs.put(invTitle, j + 1);
 				String numDupeString = (ChatColor.WHITE + "(" + Integer.toString(j) + ") ");
 				inv = Bukkit.createInventory(null, 27, (numDupeString + invTitle));
-				invMenu = Bukkit.createInventory(null, 54, ("M " + numDupeString + invTitle));	
+				invMenu = Bukkit.createInventory(null, 54, (numDupeString + invTitle));	
 			} else {
 				inv = Bukkit.createInventory(null, 27, invTitle);
-				invMenu = Bukkit.createInventory(null, 54, "M " + invTitle);	
+				invMenu = Bukkit.createInventory(null, 54, invTitle);	
 				amntDupeMsgs.put(invTitle, 0);
 			}
 			ArrayList<ArrayList<String>> invArray = new ArrayList<ArrayList<String>>(27);
 			InvUtil.defineInvContents(invArray, inv, user);
 			InvUtil.defineInvMenuContents(invArray, invMenu, user);
-			HashMap<Player, Integer> reactCount = new HashMap<Player, Integer>();
+			HashMap<String, Integer> reactCount = new HashMap<String, Integer>();
 			React.getReactCount().set(React.getCurrentInv(), reactCount);
-			Map<ItemStack, List<String>> addedReactions = new HashMap<ItemStack, List<String>>(27);
+			LinkedHashMap<ItemStack, List<String>> addedReactions = new LinkedHashMap<ItemStack, List<String>>(27);
 			React.getAddedReactions().set(React.getCurrentInv(), addedReactions);
 			React.getInventories().set(React.getCurrentInv(), inv);
 			React.getInventoriesMenu().set(React.getCurrentInv(), invMenu);
@@ -115,7 +116,7 @@ public class ChatListener implements Listener {
 
 		React.totalMsgs++;
 		React.currentInv++;
-		if (React.currentInv >= 50) {
+		if (React.currentInv >= limit) {
 			int goBackToZero = 0;
 			React.currentInv = goBackToZero;
 			React.invMult++;

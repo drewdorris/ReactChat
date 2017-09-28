@@ -2,8 +2,8 @@ package me.stupiddrew9.reactchat;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -20,11 +20,7 @@ public class React extends JavaPlugin {
 	
 	/*
 	 * TODO:
-	 * 
-	 * move item to front when it has a higher reaction
 	 * fix things
-	 * 
-	 * 
 	 */
 	
 	// all problems can be fixed with more arraylists
@@ -59,8 +55,19 @@ public class React extends JavaPlugin {
 	public static Integer[] itemIDs = new Integer[18];
 	public static String[] skullIDs = new String[18];
 	
+	private static int limit;
+	private static int messageMax;
+	
 	// get names of reactions from config
 	public void defineNames() {
+		
+		limit = config.getInt("reactionLimit");
+		messageMax = config.getInt("maxMessages");
+		
+		if (config.getInt("reactionLimit") > 18 || config.getInt("reactionLimit") < 0 || !(config.isInt("reactionLimit"))) {
+			System.out.println("[ReactChat] Value of reactionLimit invalid. Set to default value");
+			limit = 3;
+		}
 		
 	    for (String s : config.getConfigurationSection("reactions").getKeys(false)) {
 	    	
@@ -85,10 +92,17 @@ public class React extends JavaPlugin {
 		
 	}
 	
+	public static Integer getLimit() {
+		return limit;
+	}
+	public static Integer getMessageMax() {
+		return messageMax;
+	}
+	
 	public static ItemStack[] items = new ItemStack[18]; 
 	public static ItemMeta[] itemMeta = new ItemMeta[18];
 	
-	private static ArrayList<Inventory> inventories = new ArrayList<Inventory>(50);
+	private static ArrayList<Inventory> inventories = new ArrayList<Inventory>(limit + 1);
 	
 	/**
 	 * Array of each inv created for 50 msgs
@@ -102,7 +116,7 @@ public class React extends JavaPlugin {
 	 * Array of each menuinv created for 50 msgs
 	 * @return inventoriesMenu
 	 */
-	private static ArrayList<Inventory> inventoriesMenu = new ArrayList<Inventory>(50);
+	private static ArrayList<Inventory> inventoriesMenu = new ArrayList<Inventory>(limit + 1);
 	
 	public static ArrayList<Inventory> getInventoriesMenu() {
 		return inventoriesMenu;
@@ -148,23 +162,23 @@ public class React extends JavaPlugin {
 		return invMenuIdentity;
 	}
 	
-	private static ArrayList<HashMap<Player, Integer>> reactCount = new ArrayList<HashMap<Player, Integer>>(50);
+	private static ArrayList<HashMap<String, Integer>> reactCount = new ArrayList<HashMap<String, Integer>>(limit);
 	
 	/**
 	 * Counts amnt of reactions in an inv per user
 	 * @return reactCount
 	 */
-	public static ArrayList<HashMap<Player, Integer>> getReactCount() {
+	public static ArrayList<HashMap<String, Integer>> getReactCount() {
 		return reactCount;
 	}
 
-	private static ArrayList<Map<ItemStack, List<String>>> addedReactions = new ArrayList<Map<ItemStack, List<String>>>(50);
+	private static ArrayList<LinkedHashMap<ItemStack, List<String>>> addedReactions = new ArrayList<LinkedHashMap<ItemStack, List<String>>>(limit);
 	
 	/**
 	 * Counts amnt of reactions in an inv per added reaction
 	 * @return addedReactions
 	 */
-	public static ArrayList<Map<ItemStack, List<String>>> getAddedReactions() {
+	public static ArrayList<LinkedHashMap<ItemStack, List<String>>> getAddedReactions() {
 		return addedReactions;
 	}
 	

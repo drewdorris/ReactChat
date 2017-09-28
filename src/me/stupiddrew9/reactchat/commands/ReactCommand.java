@@ -14,6 +14,7 @@ public class ReactCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
 		Player player = (Player) sender;
+		int limit = React.getMessageMax();
 
 		if (!(sender instanceof Player)) {
 			return false;
@@ -33,26 +34,16 @@ public class ReactCommand implements CommandExecutor {
 				return false;
 			}
 			int argsInt = (Integer.parseInt(args[0]));
-			int totalArgsInt = (argsInt / 50);
-			int changeToInv = (argsInt - (50 * totalArgsInt));
+			int totalArgsInt = (argsInt / limit);
+			int changeToInv = (argsInt - (limit * totalArgsInt));
 
-			if (argsInt <= (React.totalMsgs - 51) || argsInt < 0) {
-				try {
-					player.openInventory(React.getInventories().get(200));
-					player.sendMessage(ChatColor.GOLD + "Error encountered.");
-				} catch (IndexOutOfBoundsException o) {
-					player.sendMessage(ChatColor.GOLD + "Message reaction expired.");
-				}
+			if (argsInt <= (React.totalMsgs - (limit + 1)) || argsInt < 0) {
+				player.sendMessage(ChatColor.GOLD + "Message reaction expired.");
 				return false;
 			}
 
 			if (argsInt >= (React.totalMsgs)) {
-				try {
-					player.openInventory(React.getInventories().get(200));
-					player.sendMessage(ChatColor.GOLD + "Error encountered.");
-				} catch (IndexOutOfBoundsException i) {
-					player.sendMessage(ChatColor.GOLD + "Message does not exist.");
-				}
+				player.sendMessage(ChatColor.GOLD + "Message does not exist.");
 				return false;
 			}
 

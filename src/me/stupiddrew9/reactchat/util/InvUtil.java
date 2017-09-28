@@ -2,8 +2,8 @@ package me.stupiddrew9.reactchat.util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.bukkit.ChatColor;
@@ -35,6 +35,9 @@ public class InvUtil {
 
 		String fullmsg = (namemsg + msg);
 		if (fullmsg.length() > 29) {
+			if (msg.length() < 13) {
+				return msg;
+			}
 			return (msg.substring(0, 12) + "...");
 		} else {
 			return msg;
@@ -139,7 +142,7 @@ public class InvUtil {
 	
 	public static void helpCommand(Player player) {
 
-		player.sendMessage(ChatColor.GOLD + "Click on a message to add a reaction. If the message is 100+ messages old, you can't react to it!");
+		player.sendMessage(ChatColor.GOLD + "Click on a message to add a reaction. If a message is 100+ messages old, you can't react to it!");
 
 	}
 	
@@ -175,35 +178,35 @@ public class InvUtil {
 	
 	/**
 	 * Sets reactions when item is clicked
-	 * @param hash
 	 * @param inventory
 	 * @param inventoryMenu
 	 * @param invOwner
 	 * @param players
 	 */
 	public static void setReactions(Inventory inventory, 
-			Inventory inventoryMenu, Player invOwner, Map<ItemStack, List<String>> players) {
+			Inventory inventoryMenu, Player invOwner, LinkedHashMap<ItemStack, List<String>> players) {
 		
-		// somehow assign players with items in hash
-		// dkiong
+		
 		ItemStack air = new ItemStack(Material.AIR);
 		for (int i = 0; i < 18; i++) {
 			inventory.setItem(i, air);
 			inventoryMenu.setItem(i, air);
 		}
 		int i = 0;
+		
 		for (Entry<ItemStack, List<String>> item : players.entrySet()) {
-			ItemStack newStack = item.getKey();
-			List<String> playerList = item.getValue();
-			int reactSize = playerList.size();
-			String usernames = String.join((CharSequence) ", ", (Iterable<? extends CharSequence>) playerList);
-			newStack.setAmount(reactSize);
-			ItemMeta newItemMetas = newStack.getItemMeta();
+			if (item.getValue().isEmpty()) {
+				continue;
+			}
+			int reactSize = item.getValue().size();
+			String usernames = String.join((CharSequence) ", ", (Iterable<? extends CharSequence>) item.getValue());
+			item.getKey().setAmount(reactSize);
+			ItemMeta newItemMetas = item.getKey().getItemMeta();
 			newItemMetas.setLore(Arrays.asList(ChatColor.GOLD + "React to " + 
 			        ChatColor.YELLOW + invOwner.getName() + ChatColor.GOLD + "'s message",
 			        ChatColor.GOLD + "Reactions:",
 			        ChatColor.YELLOW + "" + ChatColor.ITALIC + usernames));
-			newStack.setItemMeta(newItemMetas);
+			item.getKey().setItemMeta(newItemMetas);
 			
 			inventory.setItem(i, item.getKey());
 			inventoryMenu.setItem(i, item.getKey());

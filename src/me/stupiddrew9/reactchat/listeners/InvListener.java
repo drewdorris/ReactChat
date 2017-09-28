@@ -49,7 +49,7 @@ public class InvListener implements Listener {
 				invOwner = React.getPlayersHash().get(inv);
 				originalMsg = React.getMsgHash().get(inv);
 				currentInv = React.getInventories().indexOf(inv);
-				player.sendMessage(ChatColor.RED + Integer.toString(currentInv));
+				//// player.sendMessage(ChatColor.RED + Integer.toString(currentInv));
 				inventoryMenu = React.getInventoriesMenu().get(currentInv);
 				break;
 			} else {
@@ -63,7 +63,7 @@ public class InvListener implements Listener {
 				invOwner = React.getPlayersHash().get(inventory);
 				originalMsg = React.getMsgHash().get(inventory);
 				currentInv = React.getInventories().indexOf(inventory);
-				player.sendMessage(ChatColor.RED + Integer.toString(currentInv));
+				//// player.sendMessage(ChatColor.RED + Integer.toString(currentInv));
 				inventoryMenu = React.getInventoriesMenu().get(currentInv);
 				break;
 			} else {
@@ -120,6 +120,9 @@ public class InvListener implements Listener {
 		
 		for (int j = 27; j <= inventoryMenu.getSize(); j++) {
 		    menuItem = inventoryMenu.getItem(j);
+		    if (menuItem == null) {
+		    	continue;
+		    }
 		    if (item.getItemMeta().getDisplayName() == menuItem.getItemMeta().getDisplayName()) {
 				slot = j;
 		    	break;
@@ -131,9 +134,11 @@ public class InvListener implements Listener {
 
 		// reactions per player
 		int reactAmnt = 0;
-		if (!(React.getReactCount().get(currentInv).get(player) == null)) {
-			reactAmnt = React.getReactCount().get(currentInv).get(player).intValue();
+		if (React.getReactCount().get(currentInv).get(playerName) == null) {
+			reactAmnt = 0;
+			React.getReactCount().get(currentInv).put(playerName, reactAmnt);
 		}
+		reactAmnt = React.getReactCount().get(currentInv).get(playerName).intValue();
 		// new item for the added reactions section
 		ItemStack newReaction = new ItemStack(item);
 		// reactors
@@ -145,24 +150,21 @@ public class InvListener implements Listener {
 			// look in the added reactions only
 			// look in both invs
 			
-			player.sendMessage(ChatColor.GOLD + "1");
+			//// player.sendMessage(ChatColor.GOLD + "1");
 			// iterates through each reacted reaction in that inventory
 			for (Entry<ItemStack, List<String>> reaction : React.getAddedReactions().get(currentInv).entrySet()) {
 				reactionsAmnt++;
-				// reactcount is for checking if too many reactions are added to the msg
-				if ((React.getReactCount().get(currentInv).containsKey(player) == false)) {
-					React.getReactCount().get(currentInv).put(player, 0);
-				}
-				player.sendMessage(ChatColor.GOLD + "2");
+				//// player.sendMessage(ChatColor.GOLD + "2");
+				
 				// if reaction is in the hash of reactions
 				if (reaction.getKey().getItemMeta().getDisplayName() == item.getItemMeta().getDisplayName()) {
-					player.sendMessage(ChatColor.GOLD + "3");
+					//// player.sendMessage(ChatColor.GOLD + "3");
 					// if the player is already a reactor of the reaction
 					if (reaction.getValue().contains(playerName)) {
-						player.sendMessage(ChatColor.GOLD + "5");
+						//// player.sendMessage(ChatColor.GOLD + "5");
 						// remove the player from the list of reactors
 						reaction.getValue().remove(playerName);
-						React.getReactCount().get(currentInv).put(player, reactAmnt--);
+						React.getReactCount().get(currentInv).put(playerName, reactAmnt - 1);
 						// if there are no reactors, remove the item from reactions
 						if (reaction.getValue().isEmpty()) {
 							React.getAddedReactions().get(currentInv).remove(reaction);
@@ -170,92 +172,95 @@ public class InvListener implements Listener {
 						
 						InvUtil.setReactions(inventory, inventoryMenu, invOwner, 
 					             React.getAddedReactions().get(currentInv));
-						
-						break;
+						InvUtil.sendAlert(player, invOwner, originalMsg, React.reactNames[slot - 27]);
+						return;
 					}
+					
+					if (reactAmnt >= React.getLimit()) {
+						player.sendMessage(ChatColor.GOLD + "You can't add more than " + React.getLimit() + " reactions to a message!");
+						player.closeInventory();
+						return;
+					}
+					
+					React.getReactCount().get(currentInv).put(playerName, reactAmnt + 1);
 					reaction.getValue().add(playerName);
-					break;
-				}
-				
-				if (reactAmnt >= 3) {
-					player.sendMessage(ChatColor.GOLD + "You can't react to more than three messages!");
-					player.closeInventory();
+					
+					
+					InvUtil.setReactions(inventory, inventoryMenu, invOwner, 
+				             React.getAddedReactions().get(currentInv));
+					InvUtil.sendAlert(player, invOwner, originalMsg, React.reactNames[slot - 27]);
 					return;
 				}
-				
-				React.getReactCount().get(currentInv).put(player, reactAmnt++);
 				
 				// if reaction is not in the array (no prior reactions)
 				// cantdew since only checking in the added reactions (0-17 inv slots)
 				if (reactionsAmnt == React.getAddedReactions().get(currentInv).size()) {
 					player.sendMessage(ChatColor.GOLD + "Error encountered.");
 				}
-				player.sendMessage(ChatColor.GOLD + "4");
-				// update list of added reactions
-				InvUtil.setReactions(inventory, inventoryMenu, invOwner, 
-			             React.getAddedReactions().get(currentInv));
-				// alert users of reaction event
-				InvUtil.sendAlert(player, invOwner, originalMsg, React.reactNames[slot - 27]);
+				//// player.sendMessage(ChatColor.GOLD + "4");
 			}
 		}
 		
 		if (clicc.getRawSlot() > 26) {
 			// look in all reactions
 			// look in menu inv
-			player.sendMessage(ChatColor.GOLD + "11");
+			//// player.sendMessage(ChatColor.GOLD + "11");
 			for (Entry<ItemStack, List<String>> reaction : React.getAddedReactions().get(currentInv).entrySet()) {
 				reactionsAmnt++;
-				// reactcount is for checking if too many reactions are added to the msg
-				if ((React.getReactCount().get(currentInv).containsKey(player) == false)) {
-					React.getReactCount().get(currentInv).put(player, 0);
-				}
-				player.sendMessage(ChatColor.GOLD + "22");
+				
+				//// player.sendMessage(ChatColor.GOLD + "22");
 				// if reaction is in the hash of reactions
 				if (reaction.getKey().getItemMeta().getDisplayName() == item.getItemMeta().getDisplayName()) {
-					player.sendMessage(ChatColor.GOLD + "33");
+					//// player.sendMessage(ChatColor.GOLD + "33");
 					if (React.getAddedReactions().get(currentInv) == null) {
-						player.sendMessage(ChatColor.GOLD + "Whoops I Screwed Up Maybe");
+						player.sendMessage(ChatColor.GOLD + "Error encountered.");
 					}
 					if (reaction.getValue() == null) {
-						player.sendMessage(ChatColor.GOLD + "Whoops I Screwed Up");
+						player.sendMessage(ChatColor.GOLD + "Error encountered.");
 						return;
 					}
 					// if the player is already a reactor of the reaction
 					if (reaction.getValue().contains(playerName)) {
-						player.sendMessage(ChatColor.GOLD + "55");
+						//// player.sendMessage(ChatColor.GOLD + "55");
 						// remove the player from the list of reactors
 						reaction.getValue().remove(playerName);
-						React.getReactCount().get(currentInv).put(player, reactAmnt--);
+						React.getReactCount().get(currentInv).put(playerName, reactAmnt - 1);
 						// if there are no reactors, remove the item from reactions
 						if (reaction.getValue().isEmpty()) {
-							React.getAddedReactions().get(currentInv).remove(reaction);
+							//// player.sendMessage(ChatColor.GOLD + "66");
+							React.getAddedReactions().get(currentInv).remove(reaction, reaction.getValue());
 						}
 						
 						InvUtil.setReactions(inventory, inventoryMenu, invOwner, 
 					             React.getAddedReactions().get(currentInv));
 						
-						break;
+						return;
 					}
+					
+					if (reactAmnt >= React.getLimit()) {
+						player.sendMessage(ChatColor.GOLD + "You can't add more than " + React.getLimit() + " reactions to a message!");
+						player.closeInventory();
+						return;
+					}
+					
+					React.getReactCount().get(currentInv).put(playerName, reactAmnt + 1);
 					reaction.getValue().add(playerName);
 					// update the reactions list
 					InvUtil.setReactions(inventory, inventoryMenu, invOwner, 
 				             React.getAddedReactions().get(currentInv));
 					// alert users of reaction event
 					InvUtil.sendAlert(player, invOwner, originalMsg, React.reactNames[slot - 27]);
-					break;
-				}
-				
-				if (reactAmnt >= 3) {
-					player.sendMessage(ChatColor.GOLD + "You can't react to more than three messages!");
-					player.closeInventory();
 					return;
 				}
 				
-				React.getReactCount().get(currentInv).put(player, reactAmnt++);
-				
-				player.sendMessage(ChatColor.GOLD + "44");
+				//// player.sendMessage(ChatColor.GOLD + "44");
 				// if reaction is not in the array (no prior reactions)
 				if (reactionsAmnt == React.getAddedReactions().get(currentInv).size()) {
+					if (reactAmnt >= React.getLimit()) {
+						player.sendMessage(ChatColor.GOLD + "You can't add more than " + React.getLimit() + " reactions to a message!");
+						player.closeInventory();
+						return;
+					}
 					// check if reaction limit is reached
 					if (React.getAddedReactions().get(currentInv).size() == 18) {
 						player.sendMessage(ChatColor.GOLD + "This message has reached the reaction limit.");
@@ -264,29 +269,29 @@ public class InvListener implements Listener {
 					// add the reaction to the list of reactions
 				 	reactors.add(playerName);
 				 	React.getAddedReactions().get(currentInv).put(newReaction, reactors);
+				 	
+				 	React.getReactCount().get(currentInv).put(playerName, reactAmnt + 1);
+				 	
+					// update the reactions list
+					InvUtil.setReactions(inventory, inventoryMenu, invOwner, 
+				             React.getAddedReactions().get(currentInv));
+					// alert users of reaction event
+					InvUtil.sendAlert(player, invOwner, originalMsg, React.reactNames[slot - 27]);
+					return;
 				}
 				
-				// update the reactions list
-				InvUtil.setReactions(inventory, inventoryMenu, invOwner, 
-			             React.getAddedReactions().get(currentInv));
-				// alert users of reaction event
-				InvUtil.sendAlert(player, invOwner, originalMsg, React.reactNames[slot - 27]);
-				return;
 			}
-			
-			player.sendMessage(ChatColor.GOLD + "reactioawjiotajioawstjio");
 			// check if reaction limit is reached
 			if (React.getAddedReactions().get(currentInv).size() == 18) {
 				player.sendMessage(ChatColor.GOLD + "This message has reached the reaction limit.");
 				return;
 			}
+			
 			// add the reaction to the list of reactions
 		 	reactors.add(playerName);
 		 	React.getAddedReactions().get(currentInv).put(newReaction, reactors);
-		 	for (String string : React.getAddedReactions().get(currentInv).get(newReaction)) {
-		 		player.sendMessage(ChatColor.GOLD + newReaction.getItemMeta().getDisplayName());
-		 		player.sendMessage(ChatColor.GOLD + string);
-		 	}
+		 	
+		 	React.getReactCount().get(currentInv).put(playerName, reactAmnt + 1);
 		 	
 			// update the reactions list
 			InvUtil.setReactions(inventory, inventoryMenu, invOwner, 
