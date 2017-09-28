@@ -20,6 +20,12 @@ public class React extends JavaPlugin {
 	
 	/*
 	 * TODO:
+	 * clean up code / tabs / blablabla
+	 * set name as clickable if msg contains a link
+	 * timer to prevent spam
+	 * multiple pages of reactions
+	 * 
+	 * 
 	 * fix things
 	 */
 	
@@ -201,19 +207,5 @@ public class React extends JavaPlugin {
 	public static int getTotalMsgs() {
 		return totalMsgs;
 	}
-	
-	/*/
-    array of the reactions already added
-    when you click in the menu, it iterates through the array of reaction names to check if the name is in the array already --
-
-    if it doesn't exist:
-      - create an item which shares the same itemmeta as the item in the menu, add it to the array, add to arraylist<string>
-
-    if it does exist: 
-      if the arraylist<string> of reactors doesn't contain the player name:
-       - add the name
-      if the arraylist<string> of reactors does contain the player name:
-       - remove the name, if it's 0 remove the item --  
-	 */
 
 }

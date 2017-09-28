@@ -49,7 +49,6 @@ public class InvListener implements Listener {
 				invOwner = React.getPlayersHash().get(inv);
 				originalMsg = React.getMsgHash().get(inv);
 				currentInv = React.getInventories().indexOf(inv);
-				//// player.sendMessage(ChatColor.RED + Integer.toString(currentInv));
 				inventoryMenu = React.getInventoriesMenu().get(currentInv);
 				break;
 			} else {
@@ -63,7 +62,6 @@ public class InvListener implements Listener {
 				invOwner = React.getPlayersHash().get(inventory);
 				originalMsg = React.getMsgHash().get(inventory);
 				currentInv = React.getInventories().indexOf(inventory);
-				//// player.sendMessage(ChatColor.RED + Integer.toString(currentInv));
 				inventoryMenu = React.getInventoriesMenu().get(currentInv);
 				break;
 			} else {
@@ -147,21 +145,14 @@ public class InvListener implements Listener {
 		int reactionsAmnt = 0;
 		
 		if (clicc.getRawSlot() < 18) {
-			// look in the added reactions only
-			// look in both invs
-			
-			//// player.sendMessage(ChatColor.GOLD + "1");
 			// iterates through each reacted reaction in that inventory
 			for (Entry<ItemStack, List<String>> reaction : React.getAddedReactions().get(currentInv).entrySet()) {
 				reactionsAmnt++;
-				//// player.sendMessage(ChatColor.GOLD + "2");
 				
 				// if reaction is in the hash of reactions
 				if (reaction.getKey().getItemMeta().getDisplayName() == item.getItemMeta().getDisplayName()) {
-					//// player.sendMessage(ChatColor.GOLD + "3");
 					// if the player is already a reactor of the reaction
 					if (reaction.getValue().contains(playerName)) {
-						//// player.sendMessage(ChatColor.GOLD + "5");
 						// remove the player from the list of reactors
 						reaction.getValue().remove(playerName);
 						React.getReactCount().get(currentInv).put(playerName, reactAmnt - 1);
@@ -197,21 +188,17 @@ public class InvListener implements Listener {
 				if (reactionsAmnt == React.getAddedReactions().get(currentInv).size()) {
 					player.sendMessage(ChatColor.GOLD + "Error encountered.");
 				}
-				//// player.sendMessage(ChatColor.GOLD + "4");
 			}
 		}
 		
 		if (clicc.getRawSlot() > 26) {
 			// look in all reactions
 			// look in menu inv
-			//// player.sendMessage(ChatColor.GOLD + "11");
 			for (Entry<ItemStack, List<String>> reaction : React.getAddedReactions().get(currentInv).entrySet()) {
 				reactionsAmnt++;
 				
-				//// player.sendMessage(ChatColor.GOLD + "22");
 				// if reaction is in the hash of reactions
 				if (reaction.getKey().getItemMeta().getDisplayName() == item.getItemMeta().getDisplayName()) {
-					//// player.sendMessage(ChatColor.GOLD + "33");
 					if (React.getAddedReactions().get(currentInv) == null) {
 						player.sendMessage(ChatColor.GOLD + "Error encountered.");
 					}
@@ -221,13 +208,11 @@ public class InvListener implements Listener {
 					}
 					// if the player is already a reactor of the reaction
 					if (reaction.getValue().contains(playerName)) {
-						//// player.sendMessage(ChatColor.GOLD + "55");
 						// remove the player from the list of reactors
 						reaction.getValue().remove(playerName);
 						React.getReactCount().get(currentInv).put(playerName, reactAmnt - 1);
 						// if there are no reactors, remove the item from reactions
 						if (reaction.getValue().isEmpty()) {
-							//// player.sendMessage(ChatColor.GOLD + "66");
 							React.getAddedReactions().get(currentInv).remove(reaction, reaction.getValue());
 						}
 						
@@ -253,7 +238,6 @@ public class InvListener implements Listener {
 					return;
 				}
 				
-				//// player.sendMessage(ChatColor.GOLD + "44");
 				// if reaction is not in the array (no prior reactions)
 				if (reactionsAmnt == React.getAddedReactions().get(currentInv).size()) {
 					if (reactAmnt >= React.getLimit()) {
