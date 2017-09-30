@@ -21,18 +21,21 @@ public class SkullUtil {
      * @param skin url, skull
      */
     public static void getCustomSkull(String base64, ItemStack head) {
+    	
         GameProfile profile = new GameProfile(UUID.randomUUID(), null);
         PropertyMap propertyMap = profile.getProperties();
+        
         if (propertyMap == null) {
             throw new IllegalStateException("Profile doesn't contain a property map");
         }
+        
         propertyMap.put("textures", new Property("Value", base64));
         ItemMeta headMeta = head.getItemMeta();
         Class<?> headMetaClass = headMeta.getClass();
         Reflections.getField(headMetaClass, "profile", GameProfile.class).set(headMeta, profile);
         head.setItemMeta(headMeta);
+        
     }
-
 
 }
  

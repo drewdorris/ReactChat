@@ -34,13 +34,16 @@ public class React extends JavaPlugin {
 	private static React instance;
 
 	public static React getInstance() {
+		
 		return instance;
+		
 	}
 	
 	public FileConfiguration config = getConfig();
 
 	@Override
 	public void onEnable() {
+		
 		instance = this;
 		saveDefaultConfig();
 		defineNames();
@@ -54,8 +57,11 @@ public class React extends JavaPlugin {
 
 	@Override
 	public void onDisable() {
+		
 		instance = null;
+		
 	}
+	
 	
 	public static String[] reactNames = new String[18];
 	public static Integer[] itemIDs = new Integer[18];
@@ -80,27 +86,46 @@ public class React extends JavaPlugin {
 	    	String reactionName = getConfig().getString("reactions." + s + ".friendlyname");
 	    	int position = getConfig().getInt("reactions." + s + ".position");
 	    	int id = getConfig().getInt("reactions." + s + ".id");
+	    	
 	    	if (position > 18) {
 	    		instance.getServer().getLogger().info("Incorrect position for " + reactionName + " in config.yml");
 	    		continue;
 	    	}
+	    	
 	    	if (getConfig().contains("reactions." + s + ".skullid") == true) {
+	    		
 	    		String skullid = getConfig().getString("reactions." + s + ".skullid");
+	    		
 	    		if (skullid == null) {
 		    		instance.getServer().getLogger().info("Missing skull data for" + reactionName);
 		    		return;
 	    		}
+	    		
 	    		skullIDs[position] = skullid;
+	    		
 	    	}
+	    	
 	    	reactNames[position] = reactionName;
 	    	itemIDs[position] = id;
+	    	
 	    }
 		
 	}
 	
+	/**
+	 * Maximum amount of reactions per message per player
+	 * Defined in config
+	 * @return limit
+	 */
 	public static Integer getLimit() {
 		return limit;
 	}
+	
+	/**
+	 * Amount of messages sent before a message expires
+	 * Defined in config
+	 * @return messageMax
+	 */
 	public static Integer getMessageMax() {
 		return messageMax;
 	}

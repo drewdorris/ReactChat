@@ -34,13 +34,19 @@ public class InvUtil {
 	public static String invName(String namemsg, String msg) {
 
 		String fullmsg = (namemsg + msg);
+		
 		if (fullmsg.length() > 29) {
+			
 			if (msg.length() < 13) {
 				return msg;
 			}
+			
 			return (msg.substring(0, 12) + "...");
+			
 		} else {
+			
 			return msg;
+			
 		}
 
 	}
@@ -118,6 +124,7 @@ public class InvUtil {
 			String username = player.getName();
 			
 			if (!(React.skullIDs[i] == null)) {
+				
 				items[i] = new ItemStack(397, 1, (short) 3);
 				itemMeta[i] = items[i].getItemMeta();
 				itemMeta[i].setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + React.reactNames[i]);
@@ -126,8 +133,11 @@ public class InvUtil {
 				items[i].setItemMeta(itemMeta[i]);
 				SkullUtil.getCustomSkull(React.skullIDs[i], items[i]);
 				inventory.setItem(i + 27, items[i]);
+				
 				continue;
+				
 			}
+			
 			items[i] = new ItemStack(React.itemIDs[i], 1);
 			itemMeta[i] = items[i].getItemMeta();
 			itemMeta[i].setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + React.reactNames[i]);
@@ -141,9 +151,9 @@ public class InvUtil {
 	}
 	
 	public static void helpCommand(Player player) {
-
-		player.sendMessage(ChatColor.GOLD + "Click on a message to add a reaction. If a message is 100+ messages old, you can't react to it!");
-
+		
+		player.sendMessage(ChatColor.GOLD + "Click on a message to add a reaction. If a message is " + React.getMessageMax() + " messages old, you can't react to it!");
+		
 	}
 	
 	/**
@@ -157,6 +167,7 @@ public class InvUtil {
 		
 		TextComponent playerMsg = new TextComponent();
 		TextComponent invOwnerMsg = new TextComponent();
+		
 		invOwnerMsg.setText(
 				ChatColor.GOLD + "Received reaction " + ChatColor.YELLOW + itemName + ChatColor.GOLD
 			  + " from " + ChatColor.YELLOW + player.getName());
@@ -186,31 +197,36 @@ public class InvUtil {
 	public static void setReactions(Inventory inventory, 
 			Inventory inventoryMenu, Player invOwner, LinkedHashMap<ItemStack, List<String>> players) {
 		
-		
 		ItemStack air = new ItemStack(Material.AIR);
+		
 		for (int i = 0; i < 18; i++) {
 			inventory.setItem(i, air);
 			inventoryMenu.setItem(i, air);
 		}
+		
 		int i = 0;
 		
 		for (Entry<ItemStack, List<String>> item : players.entrySet()) {
+			
 			if (item.getValue().isEmpty()) {
 				continue;
 			}
-			int reactSize = item.getValue().size();
+			
 			String usernames = String.join((CharSequence) ", ", (Iterable<? extends CharSequence>) item.getValue());
-			item.getKey().setAmount(reactSize);
+			item.getKey().setAmount(item.getValue().size());
+			
 			ItemMeta newItemMetas = item.getKey().getItemMeta();
 			newItemMetas.setLore(Arrays.asList(ChatColor.GOLD + "React to " + 
 			        ChatColor.YELLOW + invOwner.getName() + ChatColor.GOLD + "'s message",
 			        ChatColor.GOLD + "Reactions:",
 			        ChatColor.YELLOW + "" + ChatColor.ITALIC + usernames));
+			
 			item.getKey().setItemMeta(newItemMetas);
 			
 			inventory.setItem(i, item.getKey());
 			inventoryMenu.setItem(i, item.getKey());
 			i++;
+			
 		}
 		
 	}

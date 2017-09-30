@@ -33,6 +33,7 @@ public class ReactCommand implements CommandExecutor {
 				player.sendMessage(ChatColor.GOLD + "Please type an integer.");
 				return false;
 			}
+			
 			int argsInt = (Integer.parseInt(args[0]));
 			int totalArgsInt = (argsInt / limit);
 			int changeToInv = (argsInt - (limit * totalArgsInt));

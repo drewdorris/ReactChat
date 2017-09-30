@@ -44,29 +44,42 @@ public class InvListener implements Listener {
 		String originalMsg = null;
 		
 		for (Inventory inv : React.getInvIdentity().keySet()) {
+			
 			if (inv.getTitle() == cliccInv.getTitle()) {
+				
 				inventory = inv;
 				invOwner = React.getPlayersHash().get(inv);
 				originalMsg = React.getMsgHash().get(inv);
 				currentInv = React.getInventories().indexOf(inv);
 				inventoryMenu = React.getInventoriesMenu().get(currentInv);
+				
 				break;
+				
 			} else {
+				
 				continue;
+				
 			}
+			
 		}
 		
 		for (Inventory inv : React.getInvMenuIdentity().keySet()) {
+			
 			if (inv.getTitle() == cliccInv.getTitle()) {
+				
 				inventory = React.getInventories().get(React.getInvMenuIdentity().get(inv).intValue());
 				invOwner = React.getPlayersHash().get(inventory);
 				originalMsg = React.getMsgHash().get(inventory);
 				currentInv = React.getInventories().indexOf(inventory);
 				inventoryMenu = React.getInventoriesMenu().get(currentInv);
+				
 				break;
+				
 			} else {
+				
 				continue;
 			}
+			
 		}
 		
 		if ((invOwner == null) || (inventory == null)) {
@@ -99,24 +112,31 @@ public class InvListener implements Listener {
 			if (ifMenuOpen.get(player) == true) {
 				player.openInventory(React.getInventories().get(currentInv));
 			    ifMenuOpen.put(player, false);
+			    
 			    return;
+			    
 			}
 			
 			player.openInventory(React.getInventoriesMenu().get(currentInv));
 		    ifMenuOpen.put(player, true);
+		    
 			return;
 			
 		}
 		
 		if (playerName == invOwnerName) {
+			
 			player.sendMessage(ChatColor.GOLD + "You can't react to your own message!");
 			player.closeInventory();
+			
 			return;
+			
 		}
 		
 		int slot = 0;
 		
 		for (int j = 27; j <= inventoryMenu.getSize(); j++) {
+			
 		    menuItem = inventoryMenu.getItem(j);
 		    if (menuItem == null) {
 		    	continue;
@@ -125,34 +145,45 @@ public class InvListener implements Listener {
 				slot = j;
 		    	break;
 		    }
+		    
 		} 
+		
 		if (!(item.getItemMeta().getDisplayName() == menuItem.getItemMeta().getDisplayName())) {
 			return;
 		}
 
 		// reactions per player
 		int reactAmnt = 0;
+		
 		if (React.getReactCount().get(currentInv).get(playerName) == null) {
 			reactAmnt = 0;
 			React.getReactCount().get(currentInv).put(playerName, reactAmnt);
 		}
+		
 		reactAmnt = React.getReactCount().get(currentInv).get(playerName).intValue();
+		
 		// new item for the added reactions section
 		ItemStack newReaction = new ItemStack(item);
+		
 		// reactors
 		List<String> reactors = new ArrayList<String>();
+		
 		// counts amnt of reactions
 		int reactionsAmnt = 0;
 		
 		if (clicc.getRawSlot() < 18) {
+			
 			// iterates through each reacted reaction in that inventory
 			for (Entry<ItemStack, List<String>> reaction : React.getAddedReactions().get(currentInv).entrySet()) {
+				
 				reactionsAmnt++;
 				
 				// if reaction is in the hash of reactions
 				if (reaction.getKey().getItemMeta().getDisplayName() == item.getItemMeta().getDisplayName()) {
+					
 					// if the player is already a reactor of the reaction
 					if (reaction.getValue().contains(playerName)) {
+						
 						// remove the player from the list of reactors
 						reaction.getValue().remove(playerName);
 						React.getReactCount().get(currentInv).put(playerName, reactAmnt - 1);
@@ -164,23 +195,29 @@ public class InvListener implements Listener {
 						InvUtil.setReactions(inventory, inventoryMenu, invOwner, 
 					             React.getAddedReactions().get(currentInv));
 						InvUtil.sendAlert(player, invOwner, originalMsg, React.reactNames[slot - 27]);
+						
 						return;
+						
 					}
 					
 					if (reactAmnt >= React.getLimit()) {
+						
 						player.sendMessage(ChatColor.GOLD + "You can't add more than " + React.getLimit() + " reactions to a message!");
 						player.closeInventory();
+						
 						return;
+						
 					}
 					
 					React.getReactCount().get(currentInv).put(playerName, reactAmnt + 1);
 					reaction.getValue().add(playerName);
 					
-					
 					InvUtil.setReactions(inventory, inventoryMenu, invOwner, 
 				             React.getAddedReactions().get(currentInv));
 					InvUtil.sendAlert(player, invOwner, originalMsg, React.reactNames[slot - 27]);
+					
 					return;
+					
 				}
 				
 				// if reaction is not in the array (no prior reactions)
@@ -188,29 +225,38 @@ public class InvListener implements Listener {
 				if (reactionsAmnt == React.getAddedReactions().get(currentInv).size()) {
 					player.sendMessage(ChatColor.GOLD + "Error encountered.");
 				}
+				
 			}
+			
 		}
 		
 		if (clicc.getRawSlot() > 26) {
+			
 			// look in all reactions
 			// look in menu inv
 			for (Entry<ItemStack, List<String>> reaction : React.getAddedReactions().get(currentInv).entrySet()) {
+				
 				reactionsAmnt++;
 				
 				// if reaction is in the hash of reactions
 				if (reaction.getKey().getItemMeta().getDisplayName() == item.getItemMeta().getDisplayName()) {
+					
 					if (React.getAddedReactions().get(currentInv) == null) {
 						player.sendMessage(ChatColor.GOLD + "Error encountered.");
 					}
+					
 					if (reaction.getValue() == null) {
 						player.sendMessage(ChatColor.GOLD + "Error encountered.");
 						return;
 					}
+					
 					// if the player is already a reactor of the reaction
 					if (reaction.getValue().contains(playerName)) {
+						
 						// remove the player from the list of reactors
 						reaction.getValue().remove(playerName);
 						React.getReactCount().get(currentInv).put(playerName, reactAmnt - 1);
+						
 						// if there are no reactors, remove the item from reactions
 						if (reaction.getValue().isEmpty()) {
 							React.getAddedReactions().get(currentInv).remove(reaction, reaction.getValue());
@@ -220,36 +266,47 @@ public class InvListener implements Listener {
 					             React.getAddedReactions().get(currentInv));
 						
 						return;
+						
 					}
 					
 					if (reactAmnt >= React.getLimit()) {
+						
 						player.sendMessage(ChatColor.GOLD + "You can't add more than " + React.getLimit() + " reactions to a message!");
 						player.closeInventory();
+						
 						return;
+						
 					}
 					
 					React.getReactCount().get(currentInv).put(playerName, reactAmnt + 1);
 					reaction.getValue().add(playerName);
+					
 					// update the reactions list
 					InvUtil.setReactions(inventory, inventoryMenu, invOwner, 
 				             React.getAddedReactions().get(currentInv));
+					
 					// alert users of reaction event
 					InvUtil.sendAlert(player, invOwner, originalMsg, React.reactNames[slot - 27]);
+					
 					return;
+					
 				}
 				
 				// if reaction is not in the array (no prior reactions)
 				if (reactionsAmnt == React.getAddedReactions().get(currentInv).size()) {
+					
 					if (reactAmnt >= React.getLimit()) {
 						player.sendMessage(ChatColor.GOLD + "You can't add more than " + React.getLimit() + " reactions to a message!");
 						player.closeInventory();
 						return;
 					}
+					
 					// check if reaction limit is reached
 					if (React.getAddedReactions().get(currentInv).size() == 18) {
 						player.sendMessage(ChatColor.GOLD + "This message has reached the reaction limit.");
 						return;
 					}
+					
 					// add the reaction to the list of reactions
 				 	reactors.add(playerName);
 				 	React.getAddedReactions().get(currentInv).put(newReaction, reactors);
@@ -259,12 +316,16 @@ public class InvListener implements Listener {
 					// update the reactions list
 					InvUtil.setReactions(inventory, inventoryMenu, invOwner, 
 				             React.getAddedReactions().get(currentInv));
+					
 					// alert users of reaction event
 					InvUtil.sendAlert(player, invOwner, originalMsg, React.reactNames[slot - 27]);
+					
 					return;
+					
 				}
 				
 			}
+			
 			// check if reaction limit is reached
 			if (React.getAddedReactions().get(currentInv).size() == 18) {
 				player.sendMessage(ChatColor.GOLD + "This message has reached the reaction limit.");
@@ -280,6 +341,7 @@ public class InvListener implements Listener {
 			// update the reactions list
 			InvUtil.setReactions(inventory, inventoryMenu, invOwner, 
 		             React.getAddedReactions().get(currentInv));
+			
 			// alert users of reaction event
 			InvUtil.sendAlert(player, invOwner, originalMsg, React.reactNames[slot - 27]);
 			
@@ -296,8 +358,10 @@ public class InvListener implements Listener {
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onInventoryExit(InventoryCloseEvent event) {
+		
 		Player player = (Player) event.getPlayer();
 	    ifMenuOpen.put(player, false);
+	    
 	}
 
 }

@@ -44,8 +44,11 @@ public class ChatListener implements Listener {
 		TextComponent newMessage = new TextComponent(message);
 		
 		if (Pattern.compile(".*[a-z].*" + ".*[a-z].*" + "[.]" + ".*[a-z].*" + ".*[a-z].*").matcher(sentMessage).find()) {
+			
 			return;
+			
 		} else {
+			
 			newMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 					new ComponentBuilder(ChatColor.GOLD + "Click to react to " + ChatColor.YELLOW + username).create()));
 			newMessage.setClickEvent(
@@ -54,22 +57,29 @@ public class ChatListener implements Listener {
 					new ComponentBuilder(ChatColor.GOLD + "Click to react to " + ChatColor.YELLOW + username).create()));
 			newMessage.setClickEvent(
 					new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/reactchat " + React.totalMsgs)));
+			
 		}
 		
 		event.setCancelled(true);
 
 		if (React.getInventories().size() < limit) {
+			
 			if (msgs.contains(invTitle)) {
+				
 				int j = amntDupeMsgs.get(invTitle);
 				amntDupeMsgs.put(invTitle, j + 1);
 				String numDupeString = (ChatColor.WHITE + "(" + Integer.toString(j) + ") ");
 				inv = Bukkit.createInventory(null, 27, (numDupeString + invTitle));	
 				invMenu = Bukkit.createInventory(null, 54, (numDupeString + invTitle));	
+				
 			} else {		
+				
 				inv = Bukkit.createInventory(null, 27, invTitle);
 				invMenu = Bukkit.createInventory(null, 54, invTitle);	
 				amntDupeMsgs.put(invTitle, 0);
+				
 			}
+			
 			// add to check for the if statement 
 			// array of item names for reactions list
 			ArrayList<ArrayList<String>> invArray = new ArrayList<ArrayList<String>>(27);
@@ -93,21 +103,29 @@ public class ChatListener implements Listener {
 			React.getPlayersHash().put(inv, user);
 			// assign an inv with the msg created
 			React.getMsgHash().put(inv, message);
+			
 		}
 
 		if (React.getInventories().size() == limit) {
+			
 			React.getInventories().get(React.getCurrentInv()).equals(null);
+			
 			if (msgs.contains(invTitle)) {
+				
 				int j = amntDupeMsgs.get(invTitle);
 				amntDupeMsgs.put(invTitle, j + 1);
 				String numDupeString = (ChatColor.WHITE + "(" + Integer.toString(j) + ") ");
 				inv = Bukkit.createInventory(null, 27, (numDupeString + invTitle));
 				invMenu = Bukkit.createInventory(null, 54, (numDupeString + invTitle));	
+				
 			} else {
+				
 				inv = Bukkit.createInventory(null, 27, invTitle);
 				invMenu = Bukkit.createInventory(null, 54, invTitle);	
 				amntDupeMsgs.put(invTitle, 0);
+				
 			}
+			
 			ArrayList<ArrayList<String>> invArray = new ArrayList<ArrayList<String>>(27);
 			InvUtil.defineInvContents(invArray, inv, user);
 			InvUtil.defineInvMenuContents(invArray, invMenu, user);
@@ -121,14 +139,18 @@ public class ChatListener implements Listener {
 			React.getInvMenuIdentity().put(invMenu, React.getCurrentInv());
 			React.getPlayersHash().put(inv, user);
 			React.getMsgHash().put(inv, message);
+			
 		}
 
 		React.totalMsgs++;
 		React.currentInv++;
+		
 		if (React.currentInv >= limit) {
+			
 			int goBackToZero = 0;
 			React.currentInv = goBackToZero;
 			React.invMult++;
+			
 		}
 
 		for (Player player : Bukkit.getOnlinePlayers()) {
