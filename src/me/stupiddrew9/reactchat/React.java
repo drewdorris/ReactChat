@@ -108,10 +108,10 @@ public class React extends JavaPlugin {
 	public static ItemStack[] items = new ItemStack[18]; 
 	public static ItemMeta[] itemMeta = new ItemMeta[18];
 	
-	private static ArrayList<Inventory> inventories = new ArrayList<Inventory>(limit + 1);
+	private static ArrayList<Inventory> inventories = new ArrayList<Inventory>(limit);
 	
 	/**
-	 * Array of each inv created for 50 msgs
+	 * Array of each inv created for limit amnt of messages
 	 * @return inventories
 	 */
 	public static ArrayList<Inventory> getInventories() {
@@ -119,10 +119,10 @@ public class React extends JavaPlugin {
 	}
 	
 	/**
-	 * Array of each menuinv created for 50 msgs
+	 * Array of each menuinv created for limit amnt of messages
 	 * @return inventoriesMenu
 	 */
-	private static ArrayList<Inventory> inventoriesMenu = new ArrayList<Inventory>(limit + 1);
+	private static ArrayList<Inventory> inventoriesMenu = new ArrayList<Inventory>(limit);
 	
 	public static ArrayList<Inventory> getInventoriesMenu() {
 		return inventoriesMenu;

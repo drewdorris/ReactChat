@@ -1,6 +1,7 @@
 package me.stupiddrew9.reactchat.listeners;
 
 import java.util.List;
+import java.util.regex.Pattern;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -36,17 +37,25 @@ public class ChatListener implements Listener {
 		Player user = event.getPlayer();
 		String username = event.getPlayer().getName();
 		String sentMessage = event.getMessage();
-		String sentMessageWName = String.format(event.getFormat(), event.getPlayer().getDisplayName(), "");
+		String messageWName = String.format(event.getFormat(), event.getPlayer().getDisplayName(), "");
 		String message = String.format(event.getFormat(), event.getPlayer().getDisplayName(), event.getMessage());
-		String invTitle = (sentMessageWName + ChatColor.DARK_GRAY + InvUtil.invName(sentMessageWName, sentMessage));
+		String invTitle = (messageWName + ChatColor.DARK_GRAY + InvUtil.invName(messageWName, sentMessage));
 		
 		TextComponent newMessage = new TextComponent(message);
-
-		newMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-				new ComponentBuilder(ChatColor.GOLD + "Click to react to " + ChatColor.YELLOW + username).create()));
-		newMessage.setClickEvent(
-				new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/reactchat " + React.totalMsgs)));
-
+		
+		if (Pattern.compile(".*[a-z].*" + ".*[a-z].*" + "[.]" + ".*[a-z].*" + ".*[a-z].*").matcher(sentMessage).find()) {
+			return;
+		} else {
+			newMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+					new ComponentBuilder(ChatColor.GOLD + "Click to react to " + ChatColor.YELLOW + username).create()));
+			newMessage.setClickEvent(
+					new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/reactchat " + React.totalMsgs)));
+			newMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
+					new ComponentBuilder(ChatColor.GOLD + "Click to react to " + ChatColor.YELLOW + username).create()));
+			newMessage.setClickEvent(
+					new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/reactchat " + React.totalMsgs)));
+		}
+		
 		event.setCancelled(true);
 
 		if (React.getInventories().size() < limit) {
