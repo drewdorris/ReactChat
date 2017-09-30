@@ -26,7 +26,7 @@ public class SkullUtil {
         PropertyMap propertyMap = profile.getProperties();
         
         if (propertyMap == null) {
-            throw new IllegalStateException("Profile doesn't contain a property map");
+        	throw new IllegalStateException("Profile doesn't contain a property map");
         }
         
         propertyMap.put("textures", new Property("Value", base64));

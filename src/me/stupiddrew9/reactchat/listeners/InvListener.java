@@ -111,14 +111,14 @@ public class InvListener implements Listener {
 			
 			if (ifMenuOpen.get(player) == true) {
 				player.openInventory(React.getInventories().get(currentInv));
-			    ifMenuOpen.put(player, false);
+				ifMenuOpen.put(player, false);
 			    
-			    return;
+				return;
 			    
 			}
 			
 			player.openInventory(React.getInventoriesMenu().get(currentInv));
-		    ifMenuOpen.put(player, true);
+			ifMenuOpen.put(player, true);
 		    
 			return;
 			
@@ -137,14 +137,14 @@ public class InvListener implements Listener {
 		
 		for (int j = 27; j <= inventoryMenu.getSize(); j++) {
 			
-		    menuItem = inventoryMenu.getItem(j);
-		    if (menuItem == null) {
-		    	continue;
-		    }
-		    if (item.getItemMeta().getDisplayName() == menuItem.getItemMeta().getDisplayName()) {
+			menuItem = inventoryMenu.getItem(j);
+			if (menuItem == null) {
+				continue;
+			}
+			if (item.getItemMeta().getDisplayName() == menuItem.getItemMeta().getDisplayName()) {
 				slot = j;
-		    	break;
-		    }
+				break;
+			}
 		    
 		} 
 		
@@ -348,7 +348,6 @@ public class InvListener implements Listener {
 		}
 
 		currentInv = 0;
-		
 		inventory = null;
 		inventoryMenu = null;
 		menuItem = null;
@@ -360,7 +359,7 @@ public class InvListener implements Listener {
 	public void onInventoryExit(InventoryCloseEvent event) {
 		
 		Player player = (Player) event.getPlayer();
-	    ifMenuOpen.put(player, false);
+		ifMenuOpen.put(player, false);
 	    
 	}
 

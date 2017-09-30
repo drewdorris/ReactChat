@@ -170,17 +170,15 @@ public class InvUtil {
 		
 		invOwnerMsg.setText(
 				ChatColor.GOLD + "Received reaction " + ChatColor.YELLOW + itemName + ChatColor.GOLD
-			  + " from " + ChatColor.YELLOW + player.getName());
+						+ " from " + ChatColor.YELLOW + player.getName());
 		playerMsg.setText(
 				ChatColor.GOLD + "Reacted with " + ChatColor.YELLOW + itemName + ChatColor.GOLD + " to "
-		      + ChatColor.YELLOW + invOwner.getName());
+						+ ChatColor.YELLOW + invOwner.getName());
 		
 		playerMsg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-				  new ComponentBuilder(
-						  originalMsg).create()));
+				new ComponentBuilder(originalMsg).create()));
 		invOwnerMsg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-				  new ComponentBuilder(
-						  originalMsg).create()));
+				new ComponentBuilder(originalMsg).create()));
 		
 		player.spigot().sendMessage(playerMsg);
 		invOwner.spigot().sendMessage(invOwnerMsg);

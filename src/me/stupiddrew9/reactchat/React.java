@@ -20,11 +20,9 @@ public class React extends JavaPlugin {
 	
 	/*
 	 * TODO:
-	 * clean up code / tabs / blablabla
-	 * set name as clickable if msg contains a link
+	 * 
 	 * timer to prevent spam
 	 * multiple pages of reactions
-	 * 
 	 * 
 	 * fix things
 	 */
@@ -50,8 +48,8 @@ public class React extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		getServer().getPluginManager().registerEvents(new InvListener(), this);
 		getCommand("reactchat").setExecutor(new ReactCommand());
-	    config.options().copyDefaults(true);
-	    saveConfig();
+		config.options().copyDefaults(true);
+		saveConfig();
 		
 	}
 
