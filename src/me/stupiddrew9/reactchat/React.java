@@ -19,17 +19,6 @@ import me.stupiddrew9.reactchat.listeners.InvListener;
 
 public class React extends JavaPlugin {
 	
-	/*
-	 * TODO:
-	 * 
-	 * timer to prevent spam
-	 * multiple pages of reactions
-	 * 
-	 * fix things
-	 */
-	
-	// all problems can be fixed with more arraylists
-	
 	private static React instance;
 
 	public static React getInstance() {
@@ -119,6 +108,9 @@ public class React extends JavaPlugin {
 		
 	}
 	
+	public static ItemStack[] items = new ItemStack[18]; 
+	public static ItemMeta[] itemMeta = new ItemMeta[18];
+	
 	/**
 	 * Maximum amount of reactions per message per player
 	 * Defined in config
@@ -144,9 +136,6 @@ public class React extends JavaPlugin {
 	public static Boolean getSelfReact() {
 		return allowSelfReact;
 	}
-	
-	public static ItemStack[] items = new ItemStack[18]; 
-	public static ItemMeta[] itemMeta = new ItemMeta[18];
 	
 	private static ArrayList<Inventory> inventories = new ArrayList<Inventory>(limit);
 	
@@ -227,6 +216,9 @@ public class React extends JavaPlugin {
 	public static ArrayList<LinkedHashMap<ItemStack, List<String>>> getAddedReactions() {
 		return addedReactions;
 	}
+	
+	// all problems can be fixed with more lists and maps
+	// - every pro dev
 	
 	public static int currentInv = 0;
 	public static int totalMsgs = 0;

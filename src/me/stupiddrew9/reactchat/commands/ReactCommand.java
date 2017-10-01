@@ -38,12 +38,12 @@ public class ReactCommand implements CommandExecutor {
 			int totalArgsInt = (argsInt / limit);
 			int changeToInv = (argsInt - (limit * totalArgsInt));
 
-			if (argsInt <= (React.totalMsgs - (limit + 1)) || argsInt < 0) {
+			if (argsInt <= (React.getTotalMsgs() - (limit + 1)) || argsInt < 0) {
 				player.sendMessage(ChatColor.GOLD + "Message reaction expired.");
 				return false;
 			}
 
-			if (argsInt >= (React.totalMsgs)) {
+			if (argsInt >= (React.getTotalMsgs())) {
 				player.sendMessage(ChatColor.GOLD + "Message does not exist.");
 				return false;
 			}

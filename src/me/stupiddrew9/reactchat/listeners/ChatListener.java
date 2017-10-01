@@ -52,11 +52,11 @@ public class ChatListener implements Listener {
 			newMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 					new ComponentBuilder(ChatColor.GOLD + "Click to react to " + ChatColor.YELLOW + username).create()));
 			newMessage.setClickEvent(
-					new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/reactchat " + React.totalMsgs)));
+					new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/reactchat " + React.getTotalMsgs())));
 			newMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 					new ComponentBuilder(ChatColor.GOLD + "Click to react to " + ChatColor.YELLOW + username).create()));
 			newMessage.setClickEvent(
-					new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/reactchat " + React.totalMsgs)));
+					new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/reactchat " + React.getTotalMsgs())));
 			
 		}
 		
