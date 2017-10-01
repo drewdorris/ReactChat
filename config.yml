@@ -10,6 +10,10 @@ reactionLimit: 3
 # Default 50 | Recommended 20-100
 maxMessages: 50
 
+# Allow users to add reactions to their own messages.
+# Default false
+allowSelfReacting: false
+
 # Create a reaction to add to the menu.
 # Number of reactions currently limited to 27.
 # 

@@ -1,5 +1,6 @@
 package me.stupiddrew9.reactchat;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
@@ -36,20 +37,26 @@ public class React extends JavaPlugin {
 		return instance;
 		
 	}
-	
+
 	public FileConfiguration config = getConfig();
 
 	@Override
 	public void onEnable() {
 		
 		instance = this;
-		saveDefaultConfig();
+		
 		defineNames();
+		File file = new File(getDataFolder() + File.separator + "config.yml");
+		if (!(file.exists())) {
+			this.getConfig().options().copyDefaults(true);
+		}
+		
+		saveConfig();
+		saveDefaultConfig();
+		
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		getServer().getPluginManager().registerEvents(new InvListener(), this);
 		getCommand("reactchat").setExecutor(new ReactCommand());
-		config.options().copyDefaults(true);
-		saveConfig();
 		
 	}
 
@@ -61,18 +68,20 @@ public class React extends JavaPlugin {
 	}
 	
 	
-	public static String[] reactNames = new String[18];
-	public static Integer[] itemIDs = new Integer[18];
-	public static String[] skullIDs = new String[18];
+	public static String[] reactNames = new String[27];
+	public static Integer[] itemIDs = new Integer[27];
+	public static String[] skullIDs = new String[27];
 	
 	private static int limit;
 	private static int messageMax;
+	private static boolean allowSelfReact;
 	
 	// get names of reactions from config
 	public void defineNames() {
 		
 		limit = config.getInt("reactionLimit");
 		messageMax = config.getInt("maxMessages");
+		allowSelfReact = config.getBoolean("allowSelfReacting");
 		
 		if (config.getInt("reactionLimit") > 18 || config.getInt("reactionLimit") < 0 || !(config.isInt("reactionLimit"))) {
 			System.out.println("[ReactChat] Value of reactionLimit invalid. Set to default value");
@@ -85,7 +94,7 @@ public class React extends JavaPlugin {
 	    	int position = getConfig().getInt("reactions." + s + ".position");
 	    	int id = getConfig().getInt("reactions." + s + ".id");
 	    	
-	    	if (position > 18) {
+	    	if (position > 26) {
 	    		instance.getServer().getLogger().info("Incorrect position for " + reactionName + " in config.yml");
 	    		continue;
 	    	}
@@ -126,6 +135,14 @@ public class React extends JavaPlugin {
 	 */
 	public static Integer getMessageMax() {
 		return messageMax;
+	}
+	
+	/**
+	 * Whether or not a user can react to their own message
+	 * @return allowSelfReact
+	 */
+	public static Boolean getSelfReact() {
+		return allowSelfReact;
 	}
 	
 	public static ItemStack[] items = new ItemStack[18]; 

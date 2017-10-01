@@ -83,7 +83,6 @@ public class InvListener implements Listener {
 		}
 		
 		if ((invOwner == null) || (inventory == null)) {
-			player.sendMessage(ChatColor.GOLD + "Wrong!");
 			return;
 		}
 
@@ -124,12 +123,16 @@ public class InvListener implements Listener {
 			
 		}
 		
-		if (playerName == invOwnerName) {
+		if (React.getSelfReact() == false) {
 			
-			player.sendMessage(ChatColor.GOLD + "You can't react to your own message!");
-			player.closeInventory();
-			
-			return;
+			if (playerName == invOwnerName) {
+				
+				player.sendMessage(ChatColor.GOLD + "You can't react to your own message!");
+				player.closeInventory();
+				
+				return;
+				
+			}
 			
 		}
 		

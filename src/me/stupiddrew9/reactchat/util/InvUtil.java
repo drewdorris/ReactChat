@@ -22,8 +22,8 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class InvUtil {
 	
-	public static ItemStack[] items = new ItemStack[18]; 
-	public static ItemMeta[] itemMeta = new ItemMeta[18];
+	public static ItemStack[] items = new ItemStack[27]; 
+	public static ItemMeta[] itemMeta = new ItemMeta[27];
 	
 	/**
 	 * Shortens length of msg for setting as inventory name
@@ -112,9 +112,9 @@ public class InvUtil {
 		inventory.setItem(25, blackGlassItem);
 		inventory.setItem(26, blackGlassItem);
 
-		for (int i = 0; i < 18; i++) {
+		for (int i = 0; i < 27; i++) {
 			
-			ArrayList<String> eachItem = new ArrayList<String>(18);
+			ArrayList<String> eachItem = new ArrayList<String>(27);
 			invArray.add(eachItem);
 			
 			if (React.reactNames[i] == null) {
@@ -169,11 +169,16 @@ public class InvUtil {
 		TextComponent invOwnerMsg = new TextComponent();
 		
 		invOwnerMsg.setText(
-				ChatColor.GOLD + "Received reaction " + ChatColor.YELLOW + itemName + ChatColor.GOLD
-						+ " from " + ChatColor.YELLOW + player.getName());
+				ChatColor.GOLD + "Received reaction " + ChatColor.YELLOW + itemName
+						+ ChatColor.GOLD + " from " + ChatColor.YELLOW + player.getName());
 		playerMsg.setText(
-				ChatColor.GOLD + "Reacted with " + ChatColor.YELLOW + itemName + ChatColor.GOLD + " to "
-						+ ChatColor.YELLOW + invOwner.getName());
+				ChatColor.GOLD + "Reacted with " + ChatColor.YELLOW + itemName 
+						+ ChatColor.GOLD + " to " + ChatColor.YELLOW + invOwner.getName());
+		if (player.getName() == invOwner.getName()) {
+			playerMsg.setText(
+				ChatColor.GOLD + "Reacted with " + ChatColor.YELLOW 
+						+ itemName + ChatColor.GOLD + " to yourself");
+		}
 		
 		playerMsg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
 				new ComponentBuilder(originalMsg).create()));
@@ -181,6 +186,18 @@ public class InvUtil {
 				new ComponentBuilder(originalMsg).create()));
 		
 		player.spigot().sendMessage(playerMsg);
+		
+		// check if self-reacting is allowed
+		if (React.getSelfReact() == true) {
+			
+			// if it is, check if they are reacting on their own message
+			// if they are, don't send them another unnecessary message
+			if (player.getName() == invOwner.getName()) { 
+				return;
+			}
+			
+		}
+		
 		invOwner.spigot().sendMessage(invOwnerMsg);
 		
 	}
