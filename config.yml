@@ -1,5 +1,5 @@
 # # # #  ||  # # # #
-# ReactChat v1.0.0 #
+# ReactChat v0.1.0 #
 # # # #  ||  # # # #
 # The maximum amount of reactions a user can add to a single message. Set to 18 for max.
 # Default 3 | Recommended 2-8

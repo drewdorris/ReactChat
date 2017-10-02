@@ -1,6 +1,6 @@
 main: me.stupiddrew9.reactchat.React
 name: ReactChat
-version: 0.0.1-SNAPSHOT
+version: 0.1.0
 commands:
   reactchat: 
 permissions:
