@@ -3,3 +3,6 @@ name: ReactChat
 version: 0.0.1-SNAPSHOT
 commands:
   reactchat: 
+permissions:
+  reactchat.react:
+  reactchat.receive:

@@ -13,8 +13,8 @@ maxMessages: 50
 # Default false
 allowSelfReacting: false
 
-# Create a reaction to add to the menu.
-# Number of reactions currently limited to 27.
+# Create reactions to add to the menu -- defaults can be changed.
+# Number of reactions limited to 27.
 # 
 # Settings:
 # friendlyname - Name of item seen in inventory

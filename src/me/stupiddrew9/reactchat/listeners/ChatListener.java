@@ -43,6 +43,10 @@ public class ChatListener implements Listener {
 		
 		TextComponent newMessage = new TextComponent(message);
 		
+		if (!(user.hasPermission("reactchat.receive"))) {
+			return;
+		}
+		
 		if (Pattern.compile(".*[a-z].*" + ".*[a-z].*" + "[.]" + ".*[a-z].*" + ".*[a-z].*").matcher(sentMessage).find()) {
 			
 			return;

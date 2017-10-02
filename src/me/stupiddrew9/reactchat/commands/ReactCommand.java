@@ -19,6 +19,11 @@ public class ReactCommand implements CommandExecutor {
 		if (!(sender instanceof Player)) {
 			return false;
 		}
+		
+		if (!(player.hasPermission("reactchat.react"))) {
+			player.sendMessage(ChatColor.GOLD + "You don't have permission to do this.");
+			return false;
+		}
 
 		if (args.length < 1) {
 			InvUtil.helpCommand(player);

@@ -197,7 +197,6 @@ public class InvListener implements Listener {
 						
 						InvUtil.setReactions(inventory, inventoryMenu, invOwner, 
 					             React.getAddedReactions().get(currentInv));
-						InvUtil.sendAlert(player, invOwner, originalMsg, React.reactNames[slot - 27]);
 						
 						return;
 						
