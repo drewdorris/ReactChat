@@ -34,11 +34,11 @@ public class React extends JavaPlugin {
 		
 		instance = this;
 		
-		defineNames();
 		File file = new File(getDataFolder() + File.separator + "config.yml");
 		if (!(file.exists())) {
 			this.getConfig().options().copyDefaults(true);
 		}
+		defineNames();
 		
 		saveConfig();
 		saveDefaultConfig();
