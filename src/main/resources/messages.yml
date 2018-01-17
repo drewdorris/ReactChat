@@ -1,0 +1,87 @@
+## Possible parameters are individually listed for each message
+## Enable/disable a set prefix for each message
+
+prefix: '&7[&6RC&7] '
+
+## {max} - see "maxMessages" in config
+## {limit} - see "reactionLimit" in config
+## {player} - typer of command
+help-message:
+  - '&6Click on a message to add a reaction.'
+  - '&6If a message is {max} messages old, reacting to it is not possible.'
+help-message-prefix: true
+
+error:
+  - '&6Error encountered.'
+error-prefix: true
+
+no-permission:
+  - &6You don't have permission to do this.'
+no-permission-prefix: true
+
+message-not-exist:
+  - '&6Message does not exist.'
+message-not-exist-prefix: true
+
+message-expired:
+  - '&6Reacting has expired for this message.'
+message-expired-prefix: true
+
+integer-pls:
+  - '&6Please type an integer.'
+integer-pls-prefix: true
+  
+## {reaction} - Name of reaction
+## {username} - Message creator
+reaction-name: '&6&l{reaction}'
+
+hide-reactions: '&6&lHide Menu'
+
+see-reactions: '&6&lAdd a Reaction'
+
+## {username} - Message creator
+reaction-lore:
+  - '&6React to &e{username}'
+
+## {username} - Message creator
+## {users} - Users who have used this reaction on this message
+reaction-list-lore:
+  - '&6Reactions:'
+  - '&e&o{users}'
+  
+## {username} - Message creator
+hover-msg: '&6Click to react to &e{username}'
+
+## {reaction} - Name of reaction
+## {reactor} - User who reacted to this message
+receive-reaction: 
+  - '&6Received reaction &e{reaction}&6 from &e{reactor}.'
+receive-reaction-prefix: false
+
+## {reaction} - Name of reaction
+## {username} - Message creator
+send-reaction: 
+  - '&6Reacted with &e{reaction}&6 to &e{username}.'
+send-reaction-prefix: false
+
+## {reaction} - Name of reaction
+## {username} - Message creator
+self-reaction:
+  - '&6Reacted with &e{reaction}&6 to yourself.'
+self-reaction-prefix: false
+
+## {username} - Message creator (& reactor)
+no-self-react:
+  - '&6You cannot react to your own message!'
+no-self-react-prefix: false
+  
+## {username} - Message creator
+reaction-max:
+  - '&6This message has reached the reaction limit.'
+reaction-max-prefix: false
+
+## {username} - Message creator
+## {limit} - see "reactionLimit" in config
+user-limit:
+  - '&6You cannot add more than {limit} reactions to a message!'
+user-limit-prefix: false

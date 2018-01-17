@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,9 +26,10 @@ import net.md_5.bungee.api.chat.TextComponent;
 
 public class ChatListener implements Listener {
 
-	private static int limit = React.getMessageMax();
-	private static ArrayList<String> msgs = new ArrayList<String>(limit);
-	private static HashMap<String, Integer> amntDupeMsgs = new HashMap<String, Integer>(limit);
+	private static int messageMax = React.getMessageMax();
+	private static ArrayList<String> msgs = new ArrayList<String>(messageMax);
+	private static HashMap<String, Integer> amntDupeMsgs = new HashMap<String, Integer>(messageMax);
+	private YamlConfiguration messages = React.getInstance().getMessages();
 	
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onPlayerChat(AsyncPlayerChatEvent event) {
@@ -48,25 +50,24 @@ public class ChatListener implements Listener {
 		}
 		
 		if (Pattern.compile(".*[a-z].*" + ".*[a-z].*" + "[.]" + ".*[a-z].*" + ".*[a-z].*").matcher(sentMessage).find()) {
-			
 			return;
-			
 		} else {
 			
+			String msg = (React.colour(messages.getString("hover-msg")));
+			if (msg == null) {
+				user.sendMessage("oof");
+			}
+			String newmsg = msg.replace("{username}", username);
+			// HOVER_MSG
 			newMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-					new ComponentBuilder(ChatColor.GOLD + "Click to react to " + ChatColor.YELLOW + username).create()));
+					new ComponentBuilder(newmsg).create()));
 			newMessage.setClickEvent(
 					new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/reactchat " + React.getTotalMsgs())));
-			newMessage.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT,
-					new ComponentBuilder(ChatColor.GOLD + "Click to react to " + ChatColor.YELLOW + username).create()));
-			newMessage.setClickEvent(
-					new ClickEvent(ClickEvent.Action.RUN_COMMAND, ("/reactchat " + React.getTotalMsgs())));
-			
 		}
 		
 		event.setCancelled(true);
 
-		if (React.getInventories().size() < limit) {
+		if (React.getInventories().size() < messageMax) {
 			
 			if (msgs.contains(invTitle)) {
 				
@@ -88,8 +89,8 @@ public class ChatListener implements Listener {
 			// array of item names for reactions list
 			ArrayList<ArrayList<String>> invArray = new ArrayList<ArrayList<String>>(27);
 			// set items in the inv
-			InvUtil.defineInvContents(invArray, inv, user);
-			InvUtil.defineInvMenuContents(invArray, invMenu, user);
+			React.getUtil().defineInvContents(invArray, inv, user);
+			React.getUtil().defineInvMenuContents(invArray, invMenu, user);
 			// store reaction count for each player
 			HashMap<String, Integer> reactCount = new HashMap<String, Integer>();
 			// array of reactCounts, set in position of currentInv
@@ -110,7 +111,7 @@ public class ChatListener implements Listener {
 			
 		}
 
-		if (React.getInventories().size() == limit) {
+		if (React.getInventories().size() == messageMax) {
 			
 			React.getInventories().get(React.getCurrentInv()).equals(null);
 			
@@ -131,8 +132,8 @@ public class ChatListener implements Listener {
 			}
 			
 			ArrayList<ArrayList<String>> invArray = new ArrayList<ArrayList<String>>(27);
-			InvUtil.defineInvContents(invArray, inv, user);
-			InvUtil.defineInvMenuContents(invArray, invMenu, user);
+			React.getUtil().defineInvContents(invArray, inv, user);
+			React.getUtil().defineInvMenuContents(invArray, invMenu, user);
 			HashMap<String, Integer> reactCount = new HashMap<String, Integer>();
 			React.getReactCount().set(React.getCurrentInv(), reactCount);
 			LinkedHashMap<ItemStack, List<String>> addedReactions = new LinkedHashMap<ItemStack, List<String>>(27);
@@ -149,15 +150,12 @@ public class ChatListener implements Listener {
 		React.totalMsgs++;
 		React.currentInv++;
 		
-		if (React.currentInv >= limit) {
-			
-			int goBackToZero = 0;
-			React.currentInv = goBackToZero;
+		if (React.currentInv >= messageMax) {
+			React.currentInv = 0;
 			React.invMult++;
-			
 		}
 
-		for (Player player : Bukkit.getOnlinePlayers()) {
+		for (Player player : event.getRecipients()) {
 			player.spigot().sendMessage(newMessage);
 		}
 

@@ -1,25 +1,34 @@
 package me.stupiddrew9.reactchat;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.google.common.io.ByteStreams;
+
 import me.stupiddrew9.reactchat.commands.ReactCommand;
 import me.stupiddrew9.reactchat.listeners.ChatListener;
 import me.stupiddrew9.reactchat.listeners.InvListener;
+import me.stupiddrew9.reactchat.util.InvUtil;
 
 public class React extends JavaPlugin {
 	
 	private static React instance;
+	private static InvUtil util;
+	private YamlConfiguration messages;
 
 	public static React getInstance() {
 		
@@ -27,25 +36,43 @@ public class React extends JavaPlugin {
 		
 	}
 
-	public FileConfiguration config = getConfig();
-
 	@Override
 	public void onEnable() {
 		
 		instance = this;
+
+		loadFiles();
 		
-		File file = new File(getDataFolder() + File.separator + "config.yml");
-		if (!(file.exists())) {
-			this.getConfig().options().copyDefaults(true);
-		}
+		util = new InvUtil();
+		
 		defineNames();
-		
-		saveConfig();
-		saveDefaultConfig();
 		
 		getServer().getPluginManager().registerEvents(new ChatListener(), this);
 		getServer().getPluginManager().registerEvents(new InvListener(), this);
 		getCommand("reactchat").setExecutor(new ReactCommand());
+		
+	}
+	
+	public void loadFiles() {
+		
+		File file = new File(getDataFolder(), "config.yml");
+		File msgs = new File(getDataFolder(), "messages.yml");
+		if (!file.exists()) {
+		    getLogger().info("config.yml not found, creating!");
+		    saveDefaultConfig();
+		}
+		if (!msgs.exists()) {
+		    getLogger().info("messages.yml not found, creating!");
+            msgs.getParentFile().mkdirs();
+            saveResource("messages.yml", false);
+		}
+		
+		messages = new YamlConfiguration();
+		try {
+			messages.load(msgs);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -56,35 +83,47 @@ public class React extends JavaPlugin {
 		
 	}
 	
+	public static InvUtil getUtil() {
+		
+		return util;
+		
+	}
+	
+	public YamlConfiguration getMessages() {
+		
+		return messages;
+		
+	}
+	
 	
 	public static String[] reactNames = new String[27];
 	public static Integer[] itemIDs = new Integer[27];
 	public static String[] skullIDs = new String[27];
 	
-	private static int limit;
+	private static int reactLimit;
 	private static int messageMax;
 	private static boolean allowSelfReact;
 	
 	// get names of reactions from config
 	public void defineNames() {
 		
-		limit = config.getInt("reactionLimit");
-		messageMax = config.getInt("maxMessages");
-		allowSelfReact = config.getBoolean("allowSelfReacting");
+		reactLimit = getConfig().getInt("reactionLimit");
+		messageMax = getConfig().getInt("maxMessages");
+		allowSelfReact = getConfig().getBoolean("allowSelfReacting");
 		
-		if (config.getInt("reactionLimit") > 18 || config.getInt("reactionLimit") < 0 || !(config.isInt("reactionLimit"))) {
-			System.out.println("[ReactChat] Value of reactionLimit invalid. Set to default value");
-			limit = 3;
+		if (getConfig().getInt("reactionLimit") > 18 || getConfig().getInt("reactionLimit") < 0 || !(getConfig().isInt("reactionLimit"))) {
+			getLogger().info("[ReactChat] Value of reactionLimit invalid. Set to default value");
+			reactLimit = 3;
 		}
 		
-	    for (String s : config.getConfigurationSection("reactions").getKeys(false)) {
+	    for (String s : getConfig().getConfigurationSection("reactions").getKeys(false)) {
 	    	
 	    	String reactionName = getConfig().getString("reactions." + s + ".friendlyname");
 	    	int position = getConfig().getInt("reactions." + s + ".position");
 	    	int id = getConfig().getInt("reactions." + s + ".id");
 	    	
 	    	if (position > 26) {
-	    		instance.getServer().getLogger().info("Incorrect position for " + reactionName + " in config.yml");
+	    		getLogger().warning("[ReactChat] Incorrect position for reaction " + reactionName + " in config.yml");
 	    		continue;
 	    	}
 	    	
@@ -93,7 +132,7 @@ public class React extends JavaPlugin {
 	    		String skullid = getConfig().getString("reactions." + s + ".skullid");
 	    		
 	    		if (skullid == null) {
-		    		instance.getServer().getLogger().info("Missing skull data for" + reactionName);
+		    		getLogger().warning("[ReactChat] Missing skull data for" + reactionName);
 		    		return;
 	    		}
 	    		
@@ -108,6 +147,41 @@ public class React extends JavaPlugin {
 		
 	}
 	
+	private InputStream in;
+	private OutputStream out;
+	
+	public File loadResource(String resource) {
+		
+		File folder = getDataFolder();
+		if (!folder.exists()) folder.mkdir();
+
+		File file = new File(folder, resource);
+
+		try {
+			
+			if (!file.exists()) {
+				
+				file.createNewFile();
+
+				try {
+					in = getResource(resource); 
+					out = new FileOutputStream(file);
+				} finally {
+					ByteStreams.copy(in, out);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return file;
+	}
+	
+	public static String colour(String msg) {
+		return ChatColor.translateAlternateColorCodes('&', msg);
+	}
+
+	
 	public static ItemStack[] items = new ItemStack[18]; 
 	public static ItemMeta[] itemMeta = new ItemMeta[18];
 	
@@ -116,8 +190,8 @@ public class React extends JavaPlugin {
 	 * Defined in config
 	 * @return limit
 	 */
-	public static Integer getLimit() {
-		return limit;
+	public static Integer getReactLimit() {
+		return reactLimit;
 	}
 	
 	/**
@@ -137,7 +211,7 @@ public class React extends JavaPlugin {
 		return allowSelfReact;
 	}
 	
-	private static ArrayList<Inventory> inventories = new ArrayList<Inventory>(limit);
+	private static ArrayList<Inventory> inventories = new ArrayList<Inventory>(reactLimit);
 	
 	/**
 	 * Array of each inv created for limit amnt of messages
@@ -151,7 +225,7 @@ public class React extends JavaPlugin {
 	 * Array of each menuinv created for limit amnt of messages
 	 * @return inventoriesMenu
 	 */
-	private static ArrayList<Inventory> inventoriesMenu = new ArrayList<Inventory>(limit);
+	private static ArrayList<Inventory> inventoriesMenu = new ArrayList<Inventory>(reactLimit);
 	
 	public static ArrayList<Inventory> getInventoriesMenu() {
 		return inventoriesMenu;
@@ -197,7 +271,7 @@ public class React extends JavaPlugin {
 		return invMenuIdentity;
 	}
 	
-	private static ArrayList<HashMap<String, Integer>> reactCount = new ArrayList<HashMap<String, Integer>>(limit);
+	private static ArrayList<HashMap<String, Integer>> reactCount = new ArrayList<HashMap<String, Integer>>(reactLimit);
 	
 	/**
 	 * Counts amnt of reactions in an inv per user
@@ -207,7 +281,7 @@ public class React extends JavaPlugin {
 		return reactCount;
 	}
 
-	private static ArrayList<LinkedHashMap<ItemStack, List<String>>> addedReactions = new ArrayList<LinkedHashMap<ItemStack, List<String>>>(limit);
+	private static ArrayList<LinkedHashMap<ItemStack, List<String>>> addedReactions = new ArrayList<LinkedHashMap<ItemStack, List<String>>>(reactLimit);
 	
 	/**
 	 * Counts amnt of reactions in an inv per added reaction

@@ -3,13 +3,14 @@ package me.stupiddrew9.reactchat.commands;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 
 import me.stupiddrew9.reactchat.React;
-import me.stupiddrew9.reactchat.util.InvUtil;
-import net.md_5.bungee.api.ChatColor;
 
 public class ReactCommand implements CommandExecutor {
+	
+	private YamlConfiguration messages = React.getInstance().getMessages();
 
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
@@ -21,12 +22,16 @@ public class ReactCommand implements CommandExecutor {
 		}
 		
 		if (!(player.hasPermission("reactchat.react"))) {
-			player.sendMessage(ChatColor.GOLD + "You don't have permission to do this.");
+			
+			// NO_PERMISSION
+			for (String line : messages.getStringList("no-permission")) {
+				player.sendMessage(React.getUtil().getPrefix("no-permission") + React.colour(line));
+			}
 			return false;
 		}
 
 		if (args.length < 1) {
-			InvUtil.helpCommand(player);
+			React.getUtil().helpCommand(player);
 			return false;
 		}
 
@@ -35,7 +40,11 @@ public class ReactCommand implements CommandExecutor {
 			try {
 				Integer.parseInt(args[0]);
 			} catch (NumberFormatException e) {
-				player.sendMessage(ChatColor.GOLD + "Please type an integer.");
+				
+				// INTEGER_PLS
+				for (String line : messages.getStringList("integer-pls")) {
+					player.sendMessage(React.getUtil().getPrefix("integer-pls") + React.colour(line));
+				}
 				return false;
 			}
 			
@@ -44,12 +53,20 @@ public class ReactCommand implements CommandExecutor {
 			int changeToInv = (argsInt - (limit * totalArgsInt));
 
 			if (argsInt <= (React.getTotalMsgs() - (limit + 1)) || argsInt < 0) {
-				player.sendMessage(ChatColor.GOLD + "Message reaction expired.");
+				
+				// MESSAGE_EXPIRED
+				for (String line : messages.getStringList("message-expired")) {
+					player.sendMessage(React.getUtil().getPrefix("message-expired") + React.colour(line));
+				}
 				return false;
 			}
 
 			if (argsInt >= (React.getTotalMsgs())) {
-				player.sendMessage(ChatColor.GOLD + "Message does not exist.");
+				
+				// MESSAGE_NOT_EXIST
+				for (String line : messages.getStringList("message-not-exist")) {
+					player.sendMessage(React.getUtil().getPrefix("message-not-exist") + React.colour(line));
+				}
 				return false;
 			}
 
@@ -59,7 +76,10 @@ public class ReactCommand implements CommandExecutor {
 
 		else {
 
-			player.sendMessage(ChatColor.GOLD + "Error encountered.");
+			// ERROR
+			for (String line : messages.getStringList("error")) {
+				player.sendMessage(React.getUtil().getPrefix("error") + React.colour(line));
+			}
 
 		}
 
