@@ -3,7 +3,7 @@
   <groupId>me.stupiddrew9</groupId>
   <artifactId>reactchat</artifactId>
   <version>0.0.1-SNAPSHOT</version>
-  <name>ruinscraft-reactions</name>
+  <name>reactchat</name>
   
   <build>
       <sourceDirectory>src</sourceDirectory>
