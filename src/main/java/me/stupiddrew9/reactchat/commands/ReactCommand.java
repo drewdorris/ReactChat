@@ -14,12 +14,18 @@ public class ReactCommand implements CommandExecutor {
 
 	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
 
-		Player player = (Player) sender;
-		int limit = React.getMessageMax();
-
 		if (!(sender instanceof Player)) {
+			for (String line : messages.getStringList("help-message")) {
+				sender.sendMessage(React.getUtil().getPrefix("help-message") + 
+						React.colour(line.replace("{max}", React.getMessageMax().toString())
+								.replace("{limit}", React.getReactLimit().toString())
+										.replace("{player}", "CONSOLE")));
+			}
 			return false;
 		}
+		
+		Player player = (Player) sender;
+		int limit = React.getMessageMax();
 		
 		if (!(player.hasPermission("reactchat.react"))) {
 			
