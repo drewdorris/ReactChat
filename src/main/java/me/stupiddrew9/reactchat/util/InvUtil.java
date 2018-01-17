@@ -109,7 +109,7 @@ public class InvUtil {
 	 */
 	public void defineInvContents(ArrayList<ArrayList<String>> invArray, Inventory inventory, Player player) {
 		
-		ItemStack moreItem = new ItemStack(Material.TOTEM, 1);
+		ItemStack moreItem = new ItemStack(Material.getMaterial(React.getInstance().getConfig().getString("menu-item")), 1);
 		ItemMeta moreItemMeta = moreItem.getItemMeta();
 		// SEE_REACTIONS
 		moreItemMeta.setDisplayName(React.colour(messages.getString("see-reactions")));
@@ -130,7 +130,7 @@ public class InvUtil {
 	@SuppressWarnings("deprecation")
 	public void defineInvMenuContents(ArrayList<ArrayList<String>> invArray, Inventory inventory, Player player) {
 		
-		ItemStack moreItem = new ItemStack(Material.TOTEM, 1);
+		ItemStack moreItem = new ItemStack(Material.getMaterial(React.getInstance().getConfig().getString("menu-item")), 1);
 		ItemMeta moreItemMeta = moreItem.getItemMeta();
 		// HIDE_REACTIONS
 		moreItemMeta.setDisplayName(React.colour(messages.getString("hide-reactions")));

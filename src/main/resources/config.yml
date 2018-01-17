@@ -1,5 +1,5 @@
 # # # #  ||  # # # #
-# ReactChat v0.2.1 #
+# ReactChat v0.2.2 #
 # # # #  ||  # # # #
 # The maximum amount of reactions a user can add to a single message. Set to 18 for max.
 # Default 3 | Recommended 2-8
@@ -12,6 +12,10 @@ maxMessages: 50
 # Allow users to add reactions to their own messages.
 # Default false
 allowSelfReacting: false
+
+# Item type for reaction menu opener
+# Default 'EYE_OF_ENDER' | List here: https://hub.spigotmc.org/javadocs/bukkit/org/bukkit/Material.html
+menu-item: 'EYE_OF_ENDER'
 
 # Create reactions to add to the menu -- defaults can be changed.
 # Number of reactions limited to 27.
